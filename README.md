@@ -12,10 +12,11 @@ kalliope install --git-url https://github.com/kalliope-project/kalliope_neuron_w
 ## Options
 
 | parameter | required | default | choices                     | comment                                                                                                                           |
-|-----------|----------|---------|-----------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| language  | yes      |         | E.g: "fr", "en", "it", "es" | See the list of available language in the "Note" section                                                                          |
-| query     | yes      |         |                             | The wikipedia page you are looking for.  This parameter can be passed as an argument in the neuron from the order with {{ query}} |
+|-----------|----------|---------|-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| language  | yes      |         | E.g: "fr", "en", "it", "es" | See the list of available language in the "Note" section                                                                    |
+| query     | yes      |         |                             | The wikipedia page you are looking for.  This parameter can be passed as an argument in the neuron from the order with {{ query}}  |
 | sentences | no       | 10      | Integer in range 1-10       | if set, return the first number of sentences(can be no greater than 10) specified in this parameter.                              |
+| titles    | no       | ~       | Integer                     | With this parameter you can limit the number of search result in case there are more then one                                     |
 
 
 ## Return Values
@@ -48,14 +49,14 @@ This synapse will look for the {{ query }} spelt by the user on Wikipedia
 
 ```
 
-## Templates example 
+## Templates example
 
 This template will simply make Kalliope speak out loud the summary section of the Wikipédia page of the query.
 If the query match more than one page, Kaliope will give the user all matched pages.
 If the query doesn't match any page on Wikipedia, kalliope will notify the user.
 ```
 {% if returncode == "DisambiguationError" %}
-    The query match following pages    
+    The query match following pages {% if titles %}limited to {{ titles }} results{% endif %}
     {% if may_refer is not none %}
         {% for page in may_refer %}
             {{ page }}
@@ -76,5 +77,5 @@ Available languages in [the detailed list of the offical Wikipedia page](https:/
 
 Copyright (c) 2016. All rights reserved.
 
-Kalliope is covered by the MIT license, a permissive free software license that lets you do anything you want with the source code, 
+Kalliope is covered by the MIT license, a permissive free software license that lets you do anything you want with the source code,
 as long as you provide back attribution and ["don't hold you liable"](http://choosealicense.com/). For the full license text see the [LICENSE.md](LICENSE.md) file.

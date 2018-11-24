@@ -20,6 +20,7 @@ class Wikipedia_searcher(NeuronModule):
         self.query = kwargs.get('query', None)
         self.language = kwargs.get('language', None)
         self.sentences = kwargs.get('sentences', None)
+        self.titles = kwargs.get('titles', None)
 
         self.may_refer = None
         self.returncode = None
@@ -39,7 +40,7 @@ class Wikipedia_searcher(NeuronModule):
                 # The options property contains a list of titles of Wikipedia pages that the query may refer to.
                 self.may_refer = e.options
                 # Removing duplicates in lists.
-                self.may_refer = list(set(self.may_refer))
+                self.may_refer = list(set(self.may_refer))[:self.titles]
                 self.returncode = "DisambiguationError"
                 summary = ""
             except wikipedia.exceptions.PageError:
@@ -50,6 +51,7 @@ class Wikipedia_searcher(NeuronModule):
             self.message = {
                 "summary": summary,
                 "may_refer": self.may_refer,
+                "titles": self.titles,
                 "returncode": self.returncode
             }
             logger.debug("Wikipedia returned message: %s" % str(self.message))
